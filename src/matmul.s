@@ -4,11 +4,11 @@
 # =======================================================
 # FUNCTION: Matrix Multiplication Implementation
 #
-# Performs operation: D = M0 × M1
+# Performs operation: D = M0 Ã M1
 # Where:
-#   - M0 is a (rows0 × cols0) matrix
-#   - M1 is a (rows1 × cols1) matrix
-#   - D is a (rows0 × cols1) result matrix
+#   - M0 is a (rows0 Ã cols0) matrix
+#   - M1 is a (rows1 Ã cols1) matrix
+#   - D is a (rows0 Ã cols1) result matrix
 #
 # Arguments:
 #   First Matrix (M0):
@@ -77,7 +77,7 @@ inner_loop_start:
 #   a4 (int)  is the stride of arr1 = for B, stride = len(rows) - 1
 # Returns:
 #   a0 (int)  is the dot product of arr0 and arr1
-    beq s1, a5, inner_loop_end
+    bge s1, a5, inner_loop_end
 
     addi sp, sp, -24
     sw a0, 0(sp)
@@ -116,6 +116,23 @@ inner_loop_start:
     
 inner_loop_end:
     # TODO: Add your own implementation
+    # Move to the next row in Matrix A
+    slli t2, a2, 2
+    add s3, s3, t2      
+    addi s0, s0, 1      
+
+    j outer_loop_start  # Jump back to the start of the outer loop
+outer_loop_end:
+    # Epilogue to restore registers and return
+    lw ra, 0(sp)
+    lw s0, 4(sp)
+    lw s1, 8(sp)
+    lw s2, 12(sp)
+    lw s3, 16(sp)
+    lw s4, 20(sp)
+    lw s5, 24(sp)
+    addi sp, sp, 28
+    jr ra
 
 error:
     li a0, 38

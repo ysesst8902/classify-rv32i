@@ -26,12 +26,30 @@ argmax:
     blt a1, t6, handle_error
 
     lw t0, 0(a0)
-
     li t1, 0
-    li t2, 1
+
 loop_start:
+    bge t6, a1, end
     # TODO: Add your own implementation
+    slli t3, t6, 2
+    add t3, a0, t3
+    lw t3, 0(t3)
+    bge t3, t0, update
+    j next_step
+      
+update:
+    mv t1, t6
+    mv t0, t3 
+
+next_step:
+    addi  t6, t6, 1                    
+    j loop_start        
+
 
 handle_error:
     li a0, 36
     j exit
+    
+end:
+    mv      a0, t1                
+    ret

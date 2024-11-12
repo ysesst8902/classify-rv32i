@@ -61,7 +61,15 @@ write_matrix:
     li t0, 2
     bne a0, t0, fwrite_error
 
-    # mul s4, s2, s3   # s4 = total elements
+#   mul s4, s2, s3   # s4 = total elements
+    li      s4, 0
+    mv t1, s2
+loop:
+    beqz t1, end
+    add s4, s4, s3
+    addi t1, t1,-1
+    j loop
+end:
     # FIXME: Replace 'mul' with your own implementation
 
     # write matrix data to file

@@ -30,14 +30,62 @@ dot:
     blt a2, t0, error_terminate  
     blt a3, t0, error_terminate   
     blt a4, t0, error_terminate  
-
     li t0, 0            
-    li t1, 0         
-
+    li t1, 0
 loop_start:
     bge t1, a2, loop_end
-    # TODO: Add your own implementation
+#    mul t4, t1, a3
+    li t6, 0  # multiplication idx
+    li t4, 0  # multiplication result
+Loop_a0:
+    bge t6, t1, Loop_a0_end
+    add t4, t4, a3
+    addi t6, t6, 1
+    j Loop_a0
 
+Loop_a0_end:
+    li t6, 0  # multiplication idx
+    li t5, 0  # multiplication result
+#     mul t5, t1, a4
+Loop_a1:
+    bge t6, t1, Loop_a1_end
+    add t5, t5, a4
+    addi t6, t6, 1
+    j Loop_a1
+Loop_a1_end:
+    slli t4, t4, 2
+    slli t5, t5, 2
+    add t4, a0, t4
+    add t5, a1, t5
+    lw t4, 0(t4)
+    lw t5, 0(t5)
+
+mul_add:
+    li t6, 0
+    bgez, t4, mul_loop_t4
+    bgez, t5, mul_loop_t5
+    li t6,0xffffffff
+    xor t4, t4, t6
+    addi t4,t4,1
+    xor t5, t5, t6
+    addi t5,t5,1
+    li t6, 0
+mul_loop_t4:
+    bge t6, t4, mul_end
+    add t0, t5, t0
+    addi t6, t6, 1
+    j mul_loop_t4
+mul_loop_t5:
+    bge t6, t5, mul_end
+    add t0, t4, t0
+    addi t6, t6, 1
+    j mul_loop_t5
+
+mul_end:
+    addi t1, t1, 1
+    j loop_start
+    
+    
 loop_end:
     mv a0, t0
     jr ra
