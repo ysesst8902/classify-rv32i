@@ -30,7 +30,6 @@ argmax:
 
 loop_start:
     bge t6, a1, end
-    # TODO: Add your own implementation
     slli t3, t6, 2
     add t3, a0, t3
     lw t3, 0(t3)

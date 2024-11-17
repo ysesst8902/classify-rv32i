@@ -28,7 +28,6 @@ relu:
     li t1, 0             
 
 loop_start:
-    # TODO: Add your own implementation
     beq t1, a1, end  
     slli t2, t1, 2 # Calculate the byte offset (index * 4) for word access
     add t2, a0, t2 # Get the address of the current element in the array
